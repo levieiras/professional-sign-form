@@ -45,7 +45,7 @@ export async function POST(request) {
   } catch (error) {
     console.error("Email error:", error);
     return Response.json(
-      { error: "Falha ao enviar email. Tente novamente." },
+      { error: `${error.message || error}` },
       { status: 500 }
     );
   }
