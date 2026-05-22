@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Eye } from "lucide-react";
+import { ChevronDown, Eye, BookOpen } from "lucide-react";
 import { saveWizardData, loadWizardData, clearWizardData } from "@/lib/storage";
 import { Progress } from "@/components/ui/progress";
 import StepIdentification from "./StepIdentification";
@@ -54,6 +54,7 @@ export default function WizardContainer() {
   const [uploadFile, setUploadFile] = useState(null);
   const [ready, setReady] = useState(false);
   const [mobilePreviewOpen, setMobilePreviewOpen] = useState(false);
+  const [mobileRefOpen, setMobileRefOpen] = useState(false);
 
   // Restore session from localStorage
   useEffect(() => {
@@ -183,7 +184,7 @@ export default function WizardContainer() {
           >
             {/* Mobile preview toggle */}
             {showPreview && (
-              <div className="lg:hidden mb-5">
+              <div className="lg:hidden mb-5 space-y-2">
                 <button
                   onClick={() => setMobilePreviewOpen((p) => !p)}
                   className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-card border border-border/60 text-sm text-muted-foreground transition-colors active:opacity-70"
@@ -198,8 +199,31 @@ export default function WizardContainer() {
                   />
                 </button>
                 {mobilePreviewOpen && (
-                  <div className="mt-3">
+                  <div className="mt-1">
                     <LogoPreview data={data} />
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setMobileRefOpen((p) => !p)}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-card border border-border/60 text-sm text-muted-foreground transition-colors active:opacity-70"
+                >
+                  <span className="flex items-center gap-2">
+                    <BookOpen size={14} />
+                    Guia visual — partes do logo
+                  </span>
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${mobileRefOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {mobileRefOpen && (
+                  <div className="rounded-xl overflow-hidden border border-border/60">
+                    <img
+                      src="/Reference-Image.png"
+                      alt="Guia das partes do logo"
+                      className="w-full"
+                    />
                   </div>
                 )}
               </div>
@@ -352,8 +376,19 @@ export default function WizardContainer() {
           {/* ── Preview sidebar (desktop) ── */}
           {showPreview && (
             <aside className="hidden lg:block w-72 shrink-0 py-8">
-              <div className="sticky top-8">
+              <div className="sticky top-8 space-y-4">
                 <LogoPreview data={data} />
+                <div className="rounded-xl overflow-hidden border border-border/60">
+                  <p className="text-xs text-muted-foreground px-3 py-2 border-b border-border/40 flex items-center gap-1.5">
+                    <BookOpen size={12} />
+                    Guia visual — partes do logo
+                  </p>
+                  <img
+                    src="/Reference-Image.png"
+                    alt="Guia das partes do logo"
+                    className="w-full"
+                  />
+                </div>
               </div>
             </aside>
           )}
