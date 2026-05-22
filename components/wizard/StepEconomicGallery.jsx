@@ -18,12 +18,13 @@ export default function StepEconomicGallery({
   stepLabel,
 }) {
   const [models, setModels] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/images?folder=models")
       .then((r) => r.json())
-      .then(({ files }) => setModels(files ?? []))
-      .catch(() => setModels([]));
+      .then(({ files }) => { setModels(files ?? []); setLoading(false); })
+      .catch(() => { setModels([]); setLoading(false); });
   }, []);
 
   const handleSelect = (filename) => {
@@ -48,12 +49,15 @@ export default function StepEconomicGallery({
       </p>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 sm:mb-8">
-        {models.length === 0 && (
+        {loading && Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="aspect-square rounded-lg bg-muted animate-pulse" />
+        ))}
+        {!loading && models.length === 0 && (
           <p className="col-span-2 sm:col-span-3 text-center text-muted-foreground text-sm py-8">
             Nenhum modelo encontrado na pasta.
           </p>
         )}
-        {models.map((filename) => {
+        {!loading && models.map((filename) => {
           const isSelected = data.modelo_escolhido === filename;
           return (
             <motion.button

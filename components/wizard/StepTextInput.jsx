@@ -81,7 +81,6 @@ export default function StepTextInput({
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-1.5">
-          <Label htmlFor={field}>{title}</Label>
           <Input
             id={field}
             {...register(field, { onChange: handleChange })}

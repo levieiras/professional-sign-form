@@ -66,7 +66,7 @@ export default function StepCustomUpload({
       </p>
       <h2 className="text-2xl font-bold mb-1">Envie uma referência</h2>
       <p className="text-muted-foreground text-sm mb-5 sm:mb-8">
-        JPG, PNG ou WebP · Máximo 4 MB
+        Envie uma foto de referência — qualquer imagem que inspire o seu logo
       </p>
 
       {!preview && !data.imagem_referencia ? (

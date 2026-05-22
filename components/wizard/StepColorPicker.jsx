@@ -8,6 +8,17 @@ import { Label } from "@/components/ui/label";
 
 const HEX_REGEX = /^#[0-9A-Fa-f]{0,6}$/;
 
+const COLOR_NAMES = {
+  "#FFFFFF": "Branco",
+  "#1A1A1A": "Preto",
+  "#6DC9A4": "Verde menta",
+  "#D4AF37": "Dourado",
+  "#F5F0E0": "Creme",
+  "#1E3A5F": "Azul marinho",
+  "#8B4513": "Marrom",
+  "#C0392B": "Vermelho",
+};
+
 export default function StepColorPicker({
   data,
   onUpdate,
@@ -66,12 +77,12 @@ export default function StepColorPicker({
       <div className="flex flex-col items-center gap-4 sm:gap-6">
         <div className="w-full max-w-xs">
           <p className="text-xs text-muted-foreground mb-2">Cores rápidas</p>
-          <div className="flex flex-wrap gap-2 mb-1">
+          <div className="flex flex-wrap gap-2 mb-2">
             {["#FFFFFF", "#1A1A1A", "#6DC9A4", "#D4AF37", "#F5F0E0", "#1E3A5F", "#8B4513", "#C0392B"].map((preset) => (
               <button
                 key={preset}
                 onClick={() => handlePickerChange(preset)}
-                className="w-9 h-9 rounded-lg border-2 transition-all active:scale-90"
+                className="w-12 h-12 rounded-lg border-2 transition-all active:scale-90"
                 style={{
                   background: preset,
                   borderColor: value === preset ? "#6DC9A4" : "rgba(255,255,255,0.15)",
@@ -80,6 +91,11 @@ export default function StepColorPicker({
               />
             ))}
           </div>
+          {COLOR_NAMES[value?.toUpperCase()] && (
+            <p className="text-xs text-primary font-medium">
+              {COLOR_NAMES[value.toUpperCase()]}
+            </p>
+          )}
         </div>
 
         <HexColorPicker
@@ -95,7 +111,7 @@ export default function StepColorPicker({
           />
           <div className="flex-1 space-y-1">
             <Label htmlFor={`color-${field}`} className="text-xs">
-              Código HEX
+              Código da cor
             </Label>
             <Input
               id={`color-${field}`}
