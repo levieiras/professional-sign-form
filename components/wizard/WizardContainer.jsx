@@ -28,6 +28,7 @@ const INITIAL_DATA = {
   cor_texto_base: "#F8F8F8",
   texto_interno: "",
   cor_texto_interno: "#F8F8F8",
+  tipo_texto_interno: null,
   imagem_referencia: null,
 };
 
@@ -88,13 +89,15 @@ export default function WizardContainer() {
       setPhase("wizard");
       setWizardStep(0);
     } else if (phase === "wizard") {
-      if (wizardStep < 7) {
+      if (wizardStep === 5 && data.tipo_texto_interno === "negativo") {
+        setWizardStep(7);
+      } else if (wizardStep < 7) {
         setWizardStep(wizardStep + 1);
       } else {
         setPhase("summary");
       }
     }
-  }, [phase, wizardStep]);
+  }, [phase, wizardStep, data.tipo_texto_interno]);
 
   const goBack = useCallback(() => {
     setDirection(-1);
@@ -102,12 +105,16 @@ export default function WizardContainer() {
     if (phase === "wizard" && wizardStep === 0) {
       setPhase("identification");
     } else if (phase === "wizard") {
-      setWizardStep((s) => s - 1);
+      if (wizardStep === 7 && data.tipo_texto_interno === "negativo") {
+        setWizardStep(5);
+      } else {
+        setWizardStep((s) => s - 1);
+      }
     } else if (phase === "summary") {
       setPhase("wizard");
       setWizardStep(7);
     }
-  }, [phase, wizardStep]);
+  }, [phase, wizardStep, data.tipo_texto_interno]);
 
   const handleSuccess = useCallback(() => {
     clearWizardData();
@@ -280,10 +287,11 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Texto da base"
+                    title="Texto sobre a base"
                     field="texto_base"
                     placeholder="Ex: Levieira's"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
+                    description="Este é o texto que fica sobre a base"
                   />
                 )}
 
@@ -293,7 +301,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Cor do texto da base"
+                    title="Cor do texto sobre a base"
                     field="cor_texto_base"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
                   />
@@ -309,6 +317,8 @@ export default function WizardContainer() {
                     field="texto_interno"
                     placeholder="Ex: Personalizados"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
+                    description="Este é o texto dentro da base, pode ser negativo ou positivo."
+                    tipoField="tipo_texto_interno"
                   />
                 )}
 

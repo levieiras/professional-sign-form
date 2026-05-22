@@ -94,7 +94,9 @@ export default function StepSummary({ data, uploadFile, onBack, onSuccess }) {
         <Row label="Tipo de logo">{TIPO_LABEL[data.tipo_logo]}</Row>
 
         {data.tipo_logo === "economica" && (
-          <Row label="Modelo escolhido">Modelo {data.modelo_escolhido}</Row>
+          <Row label="Modelo escolhido">
+            {data.modelo_escolhido?.replace(/\.[^.]+$/, "").replace(/^\d+-/, "") || "—"}
+          </Row>
         )}
         {data.tipo_logo === "customizada" && (
           <Row label="Referência">
@@ -110,9 +112,14 @@ export default function StepSummary({ data, uploadFile, onBack, onSuccess }) {
           <ColorSwatch color={data.cor_texto_base} />
         </Row>
         <Row label="Texto dentro da base">{data.texto_interno}</Row>
-        <Row label="Cor do texto dentro da base">
-          <ColorSwatch color={data.cor_texto_interno} />
+        <Row label="Tipo do texto interno">
+          {data.tipo_texto_interno === "negativo" ? "Negativo (recortado)" : "Positivo (com cor)"}
         </Row>
+        {data.tipo_texto_interno !== "negativo" && (
+          <Row label="Cor do texto dentro da base">
+            <ColorSwatch color={data.cor_texto_interno} />
+          </Row>
+        )}
         <Row label="Cor da base">
           <ColorSwatch color={data.cor_principal} />
         </Row>
