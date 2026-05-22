@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, Eye, BookOpen } from "lucide-react";
+import { ChevronDown, BookOpen } from "lucide-react";
 import { saveWizardData, loadWizardData, clearWizardData } from "@/lib/storage";
 import { Progress } from "@/components/ui/progress";
 import StepIdentification from "./StepIdentification";
@@ -14,7 +14,6 @@ import StepColorPicker from "./StepColorPicker";
 import StepTextInput from "./StepTextInput";
 import StepSummary from "./StepSummary";
 import StepSuccess from "./StepSuccess";
-import LogoPreview from "@/components/LogoPreview";
 
 const INITIAL_DATA = {
   nome: "",
@@ -53,7 +52,6 @@ export default function WizardContainer() {
   const [data, setData] = useState({ ...INITIAL_DATA, nome: clienteParam });
   const [uploadFile, setUploadFile] = useState(null);
   const [ready, setReady] = useState(false);
-  const [mobilePreviewOpen, setMobilePreviewOpen] = useState(false);
   const [mobileRefOpen, setMobileRefOpen] = useState(false);
 
   // Restore session from localStorage
@@ -182,28 +180,9 @@ export default function WizardContainer() {
                 : "w-full max-w-md py-6 sm:py-12"
             }
           >
-            {/* Mobile preview toggle */}
+            {/* Mobile guide toggle */}
             {showPreview && (
-              <div className="lg:hidden mb-5 space-y-2">
-                <button
-                  onClick={() => setMobilePreviewOpen((p) => !p)}
-                  className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-card border border-border/60 text-sm text-muted-foreground transition-colors active:opacity-70"
-                >
-                  <span className="flex items-center gap-2">
-                    <Eye size={14} />
-                    Preview da logo
-                  </span>
-                  <ChevronDown
-                    size={14}
-                    className={`transition-transform duration-200 ${mobilePreviewOpen ? "rotate-180" : ""}`}
-                  />
-                </button>
-                {mobilePreviewOpen && (
-                  <div className="mt-1">
-                    <LogoPreview data={data} />
-                  </div>
-                )}
-
+              <div className="lg:hidden mb-5">
                 <button
                   onClick={() => setMobileRefOpen((p) => !p)}
                   className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-card border border-border/60 text-sm text-muted-foreground transition-colors active:opacity-70"
@@ -218,7 +197,7 @@ export default function WizardContainer() {
                   />
                 </button>
                 {mobileRefOpen && (
-                  <div className="rounded-xl overflow-hidden border border-border/60">
+                  <div className="mt-2 rounded-xl overflow-hidden border border-border/60">
                     <img
                       src="/Reference-Image.png"
                       alt="Guia das partes do logo"
@@ -373,11 +352,10 @@ export default function WizardContainer() {
             </AnimatePresence>
           </div>
 
-          {/* ── Preview sidebar (desktop) ── */}
+          {/* ── Guide sidebar (desktop) ── */}
           {showPreview && (
             <aside className="hidden lg:block w-72 shrink-0 py-8">
-              <div className="sticky top-8 space-y-4">
-                <LogoPreview data={data} />
+              <div className="sticky top-8">
                 <div className="rounded-xl overflow-hidden border border-border/60">
                   <p className="text-xs text-muted-foreground px-3 py-2 border-b border-border/40 flex items-center gap-1.5">
                     <BookOpen size={12} />
