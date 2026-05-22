@@ -45,7 +45,7 @@ export default function StepColorPicker({
       </p>
       <h2 className="text-2xl font-bold mb-1">{title}</h2>
       <p className="text-muted-foreground text-sm mb-5 sm:mb-8">
-        Escolha no seletor ou insira o código HEX
+        Escolha a cor desejada. Nós utilizaremos o tom mais próximo possível da cor escolhida.
       </p>
 
       <div className="flex flex-col items-center gap-4 sm:gap-6">

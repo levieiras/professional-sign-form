@@ -268,7 +268,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Cor do objeto"
+                    title="Cor do Logo escolhido"
                     field="cor_objeto"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
                   />
