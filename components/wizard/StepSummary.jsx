@@ -22,9 +22,9 @@ function ColorSwatch({ color }) {
 
 function Row({ label, children }) {
   return (
-    <div className="flex items-center justify-between py-2.5 gap-4 text-sm">
-      <span className="text-muted-foreground shrink-0">{label}</span>
-      <span className="font-medium text-right">{children}</span>
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between py-2.5 gap-0.5 sm:gap-4 text-sm">
+      <span className="text-muted-foreground text-xs sm:text-sm shrink-0">{label}</span>
+      <span className="font-medium sm:text-right break-all">{children}</span>
     </div>
   );
 }
@@ -76,7 +76,7 @@ export default function StepSummary({ data, uploadFile, onBack, onSuccess }) {
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-6 text-sm transition-colors py-2"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-5 text-sm transition-colors min-h-[44px] -ml-1 pr-3"
       >
         <ChevronLeft size={15} /> Voltar
       </button>
@@ -118,7 +118,7 @@ export default function StepSummary({ data, uploadFile, onBack, onSuccess }) {
         </Row>
       </div>
 
-      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-6 sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50">
+      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-safe sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50">
         <Button
           onClick={handleSend}
           disabled={loading}

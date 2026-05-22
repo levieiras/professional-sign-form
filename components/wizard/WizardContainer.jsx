@@ -139,9 +139,9 @@ export default function WizardContainer() {
   return (
     <div className="min-h-screen bg-background">
       {/* ── Header ── */}
-      <header className="border-b border-border/50 px-4 py-4">
+      <header className="border-b border-border/50 px-4 py-2 sm:py-4">
         <div className="max-w-6xl mx-auto relative flex items-center justify-center">
-          <img src="/logo.png" alt="Levieira's" className="h-16 sm:h-20 w-auto" />
+          <img src="/logo.png" alt="Levieira's" className="h-10 sm:h-16 w-auto" />
           {showProgress && (
             <span className="absolute right-0 text-muted-foreground text-sm tabular-nums">
               {phase === "summary"
@@ -177,8 +177,8 @@ export default function WizardContainer() {
           <div
             className={
               showPreview
-                ? "flex-1 min-w-0 py-6 sm:py-8 overflow-hidden"
-                : "w-full max-w-md py-8 sm:py-12 overflow-hidden"
+                ? "flex-1 min-w-0 py-4 sm:py-8 overflow-x-hidden"
+                : "w-full max-w-md py-6 sm:py-12 overflow-x-hidden"
             }
           >
             {/* Mobile preview toggle */}

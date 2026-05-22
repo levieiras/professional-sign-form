@@ -105,3 +105,10 @@
     touch-action: manipulation;
   }
 }
+
+@layer utilities {
+  /* Safe area padding for iPhone home indicator */
+  .pb-safe {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+}

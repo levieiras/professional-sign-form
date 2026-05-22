@@ -21,7 +21,7 @@ export default function StepEconomicGallery({
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-6 text-sm transition-colors py-2"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-5 text-sm transition-colors min-h-[44px] -ml-1 pr-3"
       >
         <ChevronLeft size={15} /> Voltar
       </button>
@@ -76,7 +76,7 @@ export default function StepEconomicGallery({
         })}
       </div>
 
-      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-6 sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50 mt-2">
+      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-safe sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50 mt-2">
         <Button
           onClick={onNext}
           disabled={!data.modelo_escolhido}

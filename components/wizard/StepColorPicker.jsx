@@ -35,7 +35,7 @@ export default function StepColorPicker({
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-6 text-sm transition-colors py-2"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-5 text-sm transition-colors min-h-[44px] -ml-1 pr-3"
       >
         <ChevronLeft size={15} /> Voltar
       </button>
@@ -49,12 +49,6 @@ export default function StepColorPicker({
       </p>
 
       <div className="flex flex-col items-center gap-4 sm:gap-6">
-        <HexColorPicker
-          color={isValidHex ? value : "#6DC9A4"}
-          onChange={handlePickerChange}
-          style={{ width: "100%", maxWidth: "min(320px, 100%)", height: 200 }}
-        />
-
         <div className="w-full max-w-xs">
           <p className="text-xs text-muted-foreground mb-2">Cores rápidas</p>
           <div className="flex flex-wrap gap-2 mb-1">
@@ -72,6 +66,12 @@ export default function StepColorPicker({
             ))}
           </div>
         </div>
+
+        <HexColorPicker
+          color={isValidHex ? value : "#6DC9A4"}
+          onChange={handlePickerChange}
+          style={{ width: "100%", maxWidth: "min(320px, 100%)", height: "clamp(150px, 38vw, 210px)" }}
+        />
 
         <div className="flex items-center gap-3 w-full max-w-xs">
           <div
@@ -94,7 +94,7 @@ export default function StepColorPicker({
         </div>
       </div>
 
-      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-6 sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50 mt-6">
+      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-safe sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50 mt-6">
         <Button
           onClick={onNext}
           disabled={!isValidHex}

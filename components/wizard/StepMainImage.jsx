@@ -21,7 +21,7 @@ export default function StepMainImage({
     <div>
       <button
         onClick={onBack}
-        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-6 text-sm transition-colors py-2"
+        className="flex items-center gap-1 text-muted-foreground hover:text-foreground mb-5 text-sm transition-colors min-h-[44px] -ml-1 pr-3"
       >
         <ChevronLeft size={15} /> Voltar
       </button>
@@ -34,7 +34,7 @@ export default function StepMainImage({
         Selecione uma das opções abaixo
       </p>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
         {IMAGES.map((num) => {
           const isSelected = data.imagem_logo === num;
           return (
@@ -73,13 +73,15 @@ export default function StepMainImage({
         })}
       </div>
 
-      <Button
-        onClick={onNext}
-        disabled={!data.imagem_logo}
-        className="w-full py-6 text-base font-semibold"
-      >
-        Continuar
-      </Button>
+      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-safe sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50">
+        <Button
+          onClick={onNext}
+          disabled={!data.imagem_logo}
+          className="w-full py-6 text-base font-semibold"
+        >
+          Continuar
+        </Button>
+      </div>
     </div>
   );
 }
