@@ -139,11 +139,11 @@ export default function WizardContainer() {
   return (
     <div className="min-h-screen bg-background">
       {/* ── Header ── */}
-      <header className="border-b border-border/50 px-4 py-3">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <img src="/logo.png" alt="Levieira's" className="h-8 sm:h-10 w-auto" />
+      <header className="border-b border-border/50 px-4 py-4">
+        <div className="max-w-6xl mx-auto relative flex items-center justify-center">
+          <img src="/logo.png" alt="Levieira's" className="h-16 sm:h-20 w-auto" />
           {showProgress && (
-            <span className="text-muted-foreground text-sm tabular-nums">
+            <span className="absolute right-0 text-muted-foreground text-sm tabular-nums">
               {phase === "summary"
                 ? "Resumo"
                 : `Passo ${visibleStep}/${TOTAL_VISIBLE_STEPS}`}

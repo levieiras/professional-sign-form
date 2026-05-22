@@ -118,23 +118,25 @@ export default function StepSummary({ data, uploadFile, onBack, onSuccess }) {
         </Row>
       </div>
 
-      <Button
-        onClick={handleSend}
-        disabled={loading}
-        className="w-full py-6 text-base font-semibold"
-      >
-        {loading ? (
-          <>
-            <Loader2 className="mr-2 animate-spin" size={18} />
-            Enviando...
-          </>
-        ) : (
-          <>
-            <Send className="mr-2" size={18} />
-            ENVIAR SOLICITAÇÃO
-          </>
-        )}
-      </Button>
+      <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-6 sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50">
+        <Button
+          onClick={handleSend}
+          disabled={loading}
+          className="w-full py-6 text-base font-semibold"
+        >
+          {loading ? (
+            <>
+              <Loader2 className="mr-2 animate-spin" size={18} />
+              Enviando...
+            </>
+          ) : (
+            <>
+              <Send className="mr-2" size={18} />
+              ENVIAR SOLICITAÇÃO
+            </>
+          )}
+        </Button>
+      </div>
     </div>
   );
 }

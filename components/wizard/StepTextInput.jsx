@@ -76,9 +76,11 @@ export default function StepTextInput({
           )}
         </div>
 
-        <Button type="submit" className="w-full py-6 text-base font-semibold">
-          Continuar
-        </Button>
+        <div className="sticky bottom-0 -mx-4 px-4 pt-4 pb-6 sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50 mt-4">
+          <Button type="submit" className="w-full py-6 text-base font-semibold">
+            Continuar
+          </Button>
+        </div>
       </form>
     </div>
   );
