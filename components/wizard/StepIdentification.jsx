@@ -50,7 +50,7 @@ export default function StepIdentification({ data, onUpdate, onNext }) {
       >
         <div className="mb-5 sm:mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-2">
-            Solicitação de Logo
+            Monte sua Placa
           </h1>
           <p className="text-muted-foreground">
             Olá{" "}
