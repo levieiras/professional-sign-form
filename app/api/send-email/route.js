@@ -18,9 +18,7 @@ export async function POST(request) {
     const uploadFile = formData.get("upload");
 
     const transporter = nodemailer.createTransport({
-      host: "smtp-mail.outlook.com",
-      port: 587,
-      secure: false,
+      service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
@@ -45,7 +43,7 @@ export async function POST(request) {
   } catch (error) {
     console.error("Email error:", error);
     return Response.json(
-      { error: `${error.message || error}` },
+      { error: "Falha ao enviar email. Tente novamente." },
       { status: 500 }
     );
   }
