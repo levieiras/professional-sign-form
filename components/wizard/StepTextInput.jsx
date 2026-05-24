@@ -115,7 +115,7 @@ export default function StepTextInput({
                     <img
                       src={opt.image}
                       alt={opt.label}
-                      className="w-full h-28 object-cover object-center"
+                      className="w-full"
                     />
                     {selected && (
                       <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
