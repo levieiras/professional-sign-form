@@ -88,7 +88,6 @@ export default function StepTextInput({
             {...register(field, { onChange: handleChange })}
             placeholder={placeholder}
             className="py-6 text-base tracking-wide"
-            autoFocus
           />
           {errors[field] && (
             <p className="text-destructive text-sm">{errors[field].message}</p>

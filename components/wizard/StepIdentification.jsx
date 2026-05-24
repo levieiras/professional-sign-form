@@ -69,7 +69,6 @@ export default function StepIdentification({ data, onUpdate, onNext }) {
               placeholder="Seu nome"
               className="py-5"
               autoComplete="name"
-              autoFocus
             />
             {errors.nome && (
               <p className="text-destructive text-sm">{errors.nome.message}</p>
