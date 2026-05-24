@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown, BookOpen } from "lucide-react";
+import { Maximize2, BookOpen, X } from "lucide-react";
 import { saveWizardData, loadWizardData, clearWizardData } from "@/lib/storage";
 import { Progress } from "@/components/ui/progress";
 import StepIdentification from "./StepIdentification";
@@ -53,7 +53,7 @@ export default function WizardContainer() {
   const [data, setData] = useState({ ...INITIAL_DATA, nome: clienteParam });
   const [uploadFile, setUploadFile] = useState(null);
   const [ready, setReady] = useState(false);
-  const [mobileRefOpen, setMobileRefOpen] = useState(false);
+  const [mobileRefFull, setMobileRefFull] = useState(false);
 
   // Restore session from localStorage
   useEffect(() => {
@@ -124,6 +124,20 @@ export default function WizardContainer() {
     setWizardStep(0);
   }, [clienteParam]);
 
+  // Reference image per step (mobile guide)
+  const STEP_REFERENCE_IMAGES = {
+    "wizard-0": "/Logo-Reference.png",
+    "wizard-1": "/Logo-Reference.png",
+    "wizard-2": "/Logo-Reference.png",
+    "wizard-3": "/TextUp-Reference.png",
+    "wizard-4": "/TextUp-Reference.png",
+    "wizard-5": "/TextDown-Reference.png",
+    "wizard-6": "/TextDown-Reference.png",
+    "wizard-7": "/TextDown-Reference.png",
+  };
+  const referenceImage =
+    STEP_REFERENCE_IMAGES[`${phase}-${wizardStep}`] ?? "/Reference-Image.png";
+
   // Visual step number for display (1–7)
   const visibleStep = wizardStep <= 1 ? 1 : wizardStep;
   const progressValue =
@@ -134,7 +148,7 @@ export default function WizardContainer() {
       : (visibleStep / TOTAL_VISIBLE_STEPS) * 100;
 
   const showPreview =
-    phase === "wizard" || phase === "summary";
+    phase === "wizard";
   const showProgress =
     phase !== "identification" && phase !== "success";
 
@@ -187,44 +201,27 @@ export default function WizardContainer() {
                 : "w-full max-w-md py-6 sm:py-12"
             }
           >
-            {/* Mobile guide toggle */}
+            {/* Mobile guide — always visible compact strip */}
             {showPreview && (
               <div className="lg:hidden mb-5">
-                <button
-                  onClick={() => setMobileRefOpen((p) => !p)}
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border text-sm transition-colors active:opacity-70 ${
-                    mobileRefOpen
-                      ? "bg-card border-border/60 text-muted-foreground"
-                      : "bg-primary/10 border-primary/50 text-foreground"
-                  }`}
-                >
-                  <span className="flex items-center gap-2">
-                    <BookOpen
-                      size={14}
-                      className={mobileRefOpen ? "" : "text-primary"}
-                    />
+                <div className="relative rounded-xl overflow-hidden border border-border/60">
+                  <p className="text-xs text-muted-foreground px-3 py-2 border-b border-border/40 flex items-center gap-1.5">
+                    <BookOpen size={12} className="text-primary" />
                     Guia visual — partes do logo
-                    {!mobileRefOpen && (
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-60" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-                      </span>
-                    )}
-                  </span>
-                  <ChevronDown
-                    size={14}
-                    className={`transition-transform duration-200 ${mobileRefOpen ? "rotate-180" : ""}`}
+                  </p>
+                  <img
+                    src={referenceImage}
+                    alt="Guia das partes do logo"
+                    className="w-1/2 mx-auto block py-1"
                   />
-                </button>
-                {mobileRefOpen && (
-                  <div className="mt-2 rounded-xl overflow-hidden border border-border/60">
-                    <img
-                      src="/Reference-Image.png"
-                      alt="Guia das partes do logo"
-                      className="w-full"
-                    />
-                  </div>
-                )}
+                  <button
+                    onClick={() => setMobileRefFull(true)}
+                    className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-background/80 backdrop-blur-sm text-xs text-foreground px-2.5 py-1.5 rounded-lg border border-border/60 active:opacity-70"
+                  >
+                    <Maximize2 size={11} />
+                    ver completo
+                  </button>
+                </div>
               </div>
             )}
 
@@ -288,7 +285,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Cor do Logo escolhido"
+                    title={<>Escolha a <span className="text-primary">COR</span> do logo</>}
                     field="cor_objeto"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
                     previewImage={data.modelo_escolhido ? `/models/${data.modelo_escolhido}` : undefined}
@@ -301,7 +298,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Texto sobre a base"
+                    title={<><span className="text-primary">TEXTO</span> sobre a base</>}
                     field="texto_base"
                     placeholder="Ex: Levieira's"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
@@ -315,7 +312,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Cor do texto sobre a base"
+                    title={<><span className="text-primary">COR</span> do texto sobre a base</>}
                     field="cor_texto_base"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
                   />
@@ -327,7 +324,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Texto dentro da base"
+                    title={<><span className="text-primary">TEXTO</span> dentro da base</>}
                     field="texto_interno"
                     placeholder="Ex: Personalizados"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
@@ -342,7 +339,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Cor do texto dentro da base"
+                    title={<><span className="text-primary">COR</span> do texto dentro da base</>}
                     field="cor_texto_interno"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
                   />
@@ -354,7 +351,7 @@ export default function WizardContainer() {
                     onUpdate={updateData}
                     onNext={goNext}
                     onBack={goBack}
-                    title="Cor da base"
+                    title={<><span className="text-primary">COR</span> da base</>}
                     field="cor_principal"
                     stepLabel={`${wizardStep}/${TOTAL_VISIBLE_STEPS}`}
                   />
@@ -386,7 +383,7 @@ export default function WizardContainer() {
                     Guia visual — partes do logo
                   </p>
                   <img
-                    src="/Reference-Image.png"
+                    src={referenceImage}
                     alt="Guia das partes do logo"
                     className="w-full"
                   />
@@ -397,6 +394,31 @@ export default function WizardContainer() {
         </div>
 
       </div>
+
+      {/* Fullscreen guide overlay (mobile) */}
+      {mobileRefFull && (
+        <div className="fixed inset-0 z-50 bg-background flex flex-col lg:hidden">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-border/30">
+            <span className="text-sm font-medium flex items-center gap-2">
+              <BookOpen size={14} className="text-primary" />
+              Guia visual — partes do logo
+            </span>
+            <button
+              onClick={() => setMobileRefFull(false)}
+              className="text-muted-foreground hover:text-foreground p-1 active:opacity-70"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          <div className="flex-1 overflow-auto p-4">
+            <img
+              src={referenceImage}
+              alt="Guia das partes do logo"
+              className="w-full rounded-xl"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,14 +10,16 @@ import { Label } from "@/components/ui/label";
 
 const TIPO_OPTIONS = [
   {
-    value: "negativo",
-    label: "Negativo",
-    desc: "Texto recortado na base, sem cor própria",
-  },
-  {
     value: "positivo",
     label: "Positivo",
-    desc: "Texto com cor — você escolherá no próximo passo",
+    desc: "Texto com cor própria",
+    image: "/TextDown-Reference.png",
+  },
+  {
+    value: "negativo",
+    label: "Negativo",
+    desc: "Recortado na base, sem cor própria",
+    image: "/Negative-Reference.png",
   },
 ];
 
@@ -104,21 +106,28 @@ export default function StepTextInput({
                     key={opt.value}
                     type="button"
                     onClick={() => handleTipo(opt.value)}
-                    className={`relative flex flex-col items-start gap-1 rounded-xl border-2 p-4 text-left transition-all duration-200 ${
+                    className={`relative flex flex-col items-start rounded-xl border-2 text-left transition-all duration-200 overflow-hidden ${
                       selected
                         ? "border-primary bg-primary/5 shadow-[0_0_12px_rgba(109,201,164,0.2)]"
                         : "border-border hover:border-primary/40"
                     }`}
                   >
+                    <img
+                      src={opt.image}
+                      alt={opt.label}
+                      className="w-full h-28 object-cover object-center"
+                    />
                     {selected && (
                       <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-primary flex items-center justify-center">
                         <Check size={11} className="text-primary-foreground" />
                       </span>
                     )}
-                    <span className="font-semibold text-sm">{opt.label}</span>
-                    <span className="text-xs text-muted-foreground leading-snug">
-                      {opt.desc}
-                    </span>
+                    <div className="p-3 flex flex-col gap-0.5">
+                      <span className="font-semibold text-sm">{opt.label}</span>
+                      <span className="text-xs text-muted-foreground leading-snug">
+                        {opt.desc}
+                      </span>
+                    </div>
                   </button>
                 );
               })}

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const TYPES = [
   {
@@ -42,7 +42,7 @@ export default function StepLogoType({
       <p className="text-primary text-xs font-semibold tracking-widest mb-2 uppercase">
         Passo {stepLabel}
       </p>
-      <h2 className="text-2xl font-bold mb-1">Qual tipo de logo deseja?</h2>
+      <h2 className="text-2xl font-bold mb-1">Qual <span className="text-primary">TIPO</span> de logo deseja?</h2>
       <p className="text-muted-foreground text-sm mb-5 sm:mb-8">
         Selecione uma opção para continuar
       </p>
@@ -69,8 +69,14 @@ export default function StepLogoType({
               <div className="font-bold text-base tracking-wider mb-1.5">
                 {type.label}
               </div>
-              <div className="text-muted-foreground text-sm">
+              <div className="text-muted-foreground text-sm mb-4">
                 {type.description}
+              </div>
+              <div className={`flex items-center gap-1 text-xs font-semibold tracking-wide transition-colors ${
+                isSelected ? "text-primary" : "text-muted-foreground group-hover:text-primary"
+              }`}>
+                <ChevronRight size={13} />
+                Selecionar
               </div>
               {isSelected && (
                 <div className="absolute top-4 right-4 w-5 h-5 rounded-full bg-primary flex items-center justify-center">

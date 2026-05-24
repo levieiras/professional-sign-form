@@ -43,7 +43,7 @@ export default function StepEconomicGallery({
       <p className="text-primary text-xs font-semibold tracking-widest mb-2 uppercase">
         Passo {stepLabel}
       </p>
-      <h2 className="text-2xl font-bold mb-1">Escolha um modelo</h2>
+      <h2 className="text-2xl font-bold mb-1">Escolha o <span className="text-primary">LOGO</span> desejado</h2>
       <p className="text-muted-foreground text-sm mb-5 sm:mb-8">
         Selecione o modelo que mais combina com você
       </p>

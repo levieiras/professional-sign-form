@@ -64,7 +64,7 @@ export default function StepCustomUpload({
       <p className="text-primary text-xs font-semibold tracking-widest mb-2 uppercase">
         Passo {stepLabel}
       </p>
-      <h2 className="text-2xl font-bold mb-1">Envie uma referência</h2>
+      <h2 className="text-2xl font-bold mb-1">Envie uma <span className="text-primary">REFERÊNCIA</span></h2>
       <p className="text-muted-foreground text-sm mb-5 sm:mb-8">
         Envie uma foto de referência — qualquer imagem que inspire o seu logo
       </p>
