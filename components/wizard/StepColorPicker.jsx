@@ -20,8 +20,8 @@ const PRESET_COLORS = [
 ];
 
 const QUICK_COLORS = [
-  "#FFFFFF", "#1A1A1A", "#D9D9D9", "#A56A45", "#F2E9B6", "#F2AFAF",
-  "#5E2A86", "#2E79D1", "#6DC9A4", "#83D47A", "#FFD200", "#E43B2F",
+  "#F2AFAF", "#DE5E8B", "#FFFFFF", "#1A1A1A", "#D7C1F2", "#2E79D1",
+  "#D9D9D9", "#A56A45", "#F2E9B6", "#6DC9A4", "#83D47A", "#FFD200",
 ];
 
 const COLOR_NAMES = {
