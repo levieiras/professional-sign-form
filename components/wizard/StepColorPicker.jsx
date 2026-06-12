@@ -13,14 +13,14 @@ const PRESET_COLORS = [
   "#F2E9B6", "#F3DDB1", "#F6C9B8", "#F2AFAF", "#DE5E8B", "#EF4D90",
   // Roxos e azuis
   "#D7C1F2", "#A990D6", "#5E2A86", "#2A2F8F", "#163FB7", "#2E79D1", "#4EA7F2",
-  // Verdes
-  "#2C6A4E", "#1D8A77", "#4EAD9F", "#56C5A5", "#83D47A", "#B8F442",
+  // Verdes e ciano
+  "#2C6A4E", "#1D8A77", "#4EAD9F", "#56C5A5", "#83D47A", "#B8F442", "#06B6D4",
   // Quentes fortes
-  "#FFD200", "#FFAA00", "#FF6A00", "#E43B2F", "#B31919", "#7B1E1E", "#D4AF37",
+  "#FFD200", "#FFAA00", "#FF6A00", "#DC2626", "#FF4D4D", "#E43B2F", "#B31919", "#7B1E1E", "#D4AF37",
 ];
 
 const QUICK_COLORS = [
-  "#F2AFAF", "#DE5E8B", "#FFFFFF", "#1A1A1A", "#D7C1F2", "#2E79D1",
+  "#F2AFAF", "#DC2626", "#FFFFFF", "#1A1A1A", "#D7C1F2", "#2E79D1",
   "#D9D9D9", "#A56A45", "#F2E9B6", "#6DC9A4", "#83D47A", "#FFD200",
 ];
 
@@ -40,6 +40,8 @@ const COLOR_NAMES = {
   "#F3DDB1": "Areia clara",
   "#F6C9B8": "Pêssego",
   "#F2AFAF": "Rosa claro",
+  "#DC2626": "Vermelho",
+  "#FF4D4D": "Vermelho claro",
   "#DE5E8B": "Rosa escuro",
   "#EF4D90": "Magenta",
   "#D7C1F2": "Lilás",
@@ -56,6 +58,7 @@ const COLOR_NAMES = {
   "#56C5A5": "Menta intensa",
   "#83D47A": "Verde limão suave",
   "#B8F442": "Verde limão",
+  "#06B6D4": "Ciano",
   "#FFD200": "Amarelo vivo",
   "#FFAA00": "Âmbar",
   "#FF6A00": "Laranja",
