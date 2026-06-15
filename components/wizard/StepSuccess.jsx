@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { CheckCircle2, RotateCcw } from "lucide-react";
+import confetti from "canvas-confetti";
 
 function WhatsAppIcon({ size = 18 }) {
   return (
@@ -37,7 +39,91 @@ const COLOR_NAMES = {
 function colorLabel(hex) {
   if (!hex) return "-";
   const name = COLOR_NAMES[hex.toUpperCase()] ?? COLOR_NAMES[hex];
-  return name ? `${name} (${hex})` : hex;
+  return name || "-";
+}
+
+function LogoPreview({ data }) {
+  const objColor = data.cor_objeto || "#6DC9A4";
+  const baseColor = data.cor_principal || "#6DC9A4";
+  const textBaseColor = data.cor_texto_base || "#F8F8F8";
+  const textInnerColor =
+    data.tipo_texto_interno === "negativo"
+      ? "transparent"
+      : data.cor_texto_interno || "#F8F8F8";
+  const textBase = data.texto_base || "TEXTO";
+  const textInner = data.texto_interno || "texto";
+  const isNegativo = data.tipo_texto_interno === "negativo";
+
+  return (
+    <div className="w-full max-w-[200px] mx-auto">
+      <svg viewBox="0 0 400 320" className="w-full h-auto drop-shadow-lg">
+        {/* Objeto decorativo (losangos) */}
+        <circle cx="200" cy="45" r="12" fill={objColor} opacity="0.9" />
+        <circle cx="170" cy="30" r="8" fill={objColor} opacity="0.7" />
+        <circle cx="230" cy="30" r="8" fill={objColor} opacity="0.7" />
+        <circle cx="150" cy="55" r="6" fill={objColor} opacity="0.5" />
+        <circle cx="250" cy="55" r="6" fill={objColor} opacity="0.5" />
+
+        {/* Texto sobre a base */}
+        <rect x="40" y="75" width="320" height="60" rx="8" fill={objColor} />
+        <text
+          x="200"
+          y="113"
+          textAnchor="middle"
+          fill={textBaseColor}
+          fontSize="26"
+          fontWeight="bold"
+          fontFamily="sans-serif"
+          letterSpacing="2"
+        >
+          {textBase}
+        </text>
+
+        {/* Base inferior */}
+        <rect x="60" y="150" width="280" height="100" rx="12" fill={baseColor} />
+
+        {/* Texto dentro da base */}
+        {isNegativo ? (
+          <foreignObject x="80" y="170" width="240" height="60">
+            <div
+              style={{
+                color: "transparent",
+                fontSize: "22px",
+                fontWeight: "bold",
+                textAlign: "center",
+                fontFamily: "sans-serif",
+                letterSpacing: "1px",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                backgroundImage: `linear-gradient(180deg, ${baseColor} 0%, ${baseColor} 100%)`,
+                color: "transparent",
+                mixBlendMode: "difference",
+                filter: "invert(1)",
+              }}
+            >
+              {textInner}
+            </div>
+          </foreignObject>
+        ) : (
+          <text
+            x="200"
+            y="205"
+            textAnchor="middle"
+            fill={textInnerColor}
+            fontSize="22"
+            fontWeight="bold"
+            fontFamily="sans-serif"
+            letterSpacing="1"
+          >
+            {textInner}
+          </text>
+        )}
+
+        {/* Detalhe decorativo */}
+        <line x1="100" y1="280" x2="300" y2="280" stroke={objColor} strokeWidth="2" opacity="0.3" />
+      </svg>
+    </div>
+  );
 }
 
 function buildSummaryMessage(data) {
@@ -90,19 +176,49 @@ function buildSummaryMessage(data) {
 }
 
 export default function StepSuccess({ onReset, data }) {
+  const confettiDone = useRef(false);
+
+  useEffect(() => {
+    if (confettiDone.current) return;
+    confettiDone.current = true;
+
+    const duration = 2000;
+    const end = Date.now() + duration;
+
+    const frame = () => {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.6 },
+        colors: ["#6DC9A4", "#FFD200", "#4EA7F2", "#DE5E8B"],
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.6 },
+        colors: ["#6DC9A4", "#FFD200", "#4EA7F2", "#DE5E8B"],
+      });
+      if (Date.now() < end) requestAnimationFrame(frame);
+    };
+
+    frame();
+  }, []);
+
   const summaryUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${buildSummaryMessage(data)}`;
   const contactUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Olá! Acabei de enviar uma solicitação de logo e tenho uma dúvida.")}`;
 
   return (
-    <div className="py-10 sm:py-16 text-center">
+    <div className="py-8 sm:py-12 text-center">
       <motion.div
         initial={{ scale: 0.4, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", stiffness: 180, damping: 14 }}
       >
         <CheckCircle2
-          className="mx-auto mb-6"
-          size={72}
+          className="mx-auto mb-4"
+          size={64}
           style={{ color: "#6DC9A4" }}
         />
       </motion.div>
@@ -110,20 +226,44 @@ export default function StepSuccess({ onReset, data }) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.35 }}
+        transition={{ delay: 0.25 }}
         className="flex flex-col items-center"
       >
         <img
           src="/logo.png"
           alt="Levieira's"
-          className="w-48 sm:w-64 mb-6 object-contain"
+          className="w-36 sm:w-48 mb-4 object-contain"
         />
-        <h2 className="text-3xl font-bold mb-3">Solicitação enviada!</h2>
-        <p className="text-muted-foreground mb-8 max-w-sm mx-auto leading-relaxed">
+
+        <h2 className="text-2xl sm:text-3xl font-bold mb-2">
+          Solicitação enviada!
+        </h2>
+        <p className="text-muted-foreground text-sm mb-5 max-w-xs mx-auto leading-relaxed">
           Obrigado pela preferência! 🙏 Recebemos o seu pedido e entraremos em
-          contato em breve. Se preferir, envie o resumo pelo WhatsApp ou fale
-          diretamente conosco.
+          contato em breve.
         </p>
+
+        {/* Preview do logo */}
+        <div className="w-full max-w-xs bg-card border border-border/60 rounded-2xl p-5 mb-6">
+          <p className="text-xs text-muted-foreground mb-4 text-center font-medium tracking-wide uppercase">
+            Preview do seu logo
+          </p>
+          <LogoPreview data={data} />
+          <div className="mt-4 pt-3 border-t border-border/30 space-y-1 text-xs text-muted-foreground text-left">
+            <div className="flex justify-between">
+              <span>Tipo</span>
+              <span className="font-medium text-foreground capitalize">
+                {data.tipo_logo === "economica" ? "Econômica" : "Customizada"}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>Texto</span>
+              <span className="font-medium text-foreground truncate ml-2">
+                {data.texto_base || "—"}
+              </span>
+            </div>
+          </div>
+        </div>
 
         <div className="flex flex-col gap-3 w-full max-w-sm">
           <a
@@ -152,7 +292,7 @@ export default function StepSuccess({ onReset, data }) {
 
         <button
           onClick={onReset}
-          className="mt-6 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
+          className="mt-5 flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors py-2"
         >
           <RotateCcw size={13} />
           Nova solicitação

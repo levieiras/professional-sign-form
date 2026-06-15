@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import BackButton from "./BackButton";
+import { useHaptic } from "@/lib/hooks/useHaptic";
 
 const TIPO_OPTIONS = [
   {
@@ -37,6 +38,7 @@ export default function StepTextInput({
   description,
   tipoField,
 }) {
+  const { trigger: haptic } = useHaptic();
   const schema = z.object({
     [field]: z.string().min(1, "Campo obrigatório"),
   });
@@ -58,6 +60,7 @@ export default function StepTextInput({
   };
 
   const handleTipo = (value) => {
+    haptic(8);
     onUpdate({ [tipoField]: value });
   };
 

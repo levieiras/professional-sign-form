@@ -74,8 +74,7 @@ export default function LogoPreview({ data }) {
                   className="w-3 h-3 rounded-sm shrink-0 border border-white/10"
                   style={{ background: color }}
                 />
-                <span>{label}:</span>
-                <code className="font-mono">{color}</code>
+                <span className="font-medium text-foreground">{label}</span>
               </div>
             ) : null
           )}

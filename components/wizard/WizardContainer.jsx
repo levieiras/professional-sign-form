@@ -3,9 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import { Maximize2, BookOpen, X } from "lucide-react";
+import { BookOpen, X, Maximize2 } from "lucide-react";
 import { saveWizardData, loadWizardData, clearWizardData } from "@/lib/storage";
-import { Progress } from "@/components/ui/progress";
 import StepIdentification from "./StepIdentification";
 import StepLogoType from "./StepLogoType";
 import StepEconomicGallery from "./StepEconomicGallery";
@@ -14,6 +13,8 @@ import StepColorPicker from "./StepColorPicker";
 import StepTextInput from "./StepTextInput";
 import StepSummary from "./StepSummary";
 import StepSuccess from "./StepSuccess";
+import { useVisualViewport } from "@/lib/hooks/useVisualViewport";
+import { useHaptic } from "@/lib/hooks/useHaptic";
 
 const INITIAL_DATA = {
   nome: "",
@@ -43,9 +44,61 @@ const slideVariants = {
   exit: (dir) => ({ opacity: 0, y: dir > 0 ? -14 : 14 }),
 };
 
+const STEP_META = [
+  { label: "Tipo", icon: "◆" },
+  { label: "Modelo", icon: "◈" },
+  { label: "Cor", icon: "🎨" },
+  { label: "Texto", icon: "A" },
+  { label: "Cor", icon: "🖌" },
+  { label: "Texto", icon: "A" },
+  { label: "Cor", icon: "🎨" },
+  { label: "Base", icon: "⬜" },
+];
+
+function StepProgress({ current, total, phase }) {
+  if (phase === "identification" || phase === "success" || phase === "summary") return null;
+  const dots = [];
+  // wizard steps 0-7, but visual is 1-7 (steps 0 and 1 share "1")
+  const visualStep = current <= 1 ? 1 : current;
+  for (let i = 1; i <= total; i++) {
+    const isActive = i <= visualStep;
+    const isCurrent = i === visualStep;
+    dots.push(
+      <div key={i} className="flex items-center gap-0.5">
+        <div
+          className={`
+            w-2 h-2 rounded-full transition-all duration-300
+            ${isCurrent ? "bg-primary scale-125 shadow-[0_0_6px_rgba(109,201,164,0.5)]" : ""}
+            ${isActive && !isCurrent ? "bg-primary/60" : ""}
+            ${!isActive ? "bg-muted-foreground/25" : ""}
+          `}
+        />
+      </div>
+    );
+  }
+  return (
+    <div className="px-4 border-b border-border/20">
+      <div className="max-w-6xl mx-auto py-2.5 flex items-center justify-between">
+        <div className="flex items-center gap-1.5">
+          {dots}
+        </div>
+        <span className="text-xs font-semibold text-muted-foreground tabular-nums">
+          <span className="text-primary">{visualStep}</span>
+          <span className="text-muted-foreground/50">/{total}</span>
+          <span className="ml-2 text-muted-foreground/70 font-normal">
+            {STEP_META[current]?.label ?? ""}
+          </span>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function WizardContainer() {
   const searchParams = useSearchParams();
   const clienteParam = searchParams.get("cliente") || "";
+  const { isKeyboardOpen } = useVisualViewport();
+  const { trigger: haptic } = useHaptic();
 
   const [phase, setPhase] = useState("identification");
   const [wizardStep, setWizardStep] = useState(0);
@@ -72,6 +125,11 @@ export default function WizardContainer() {
     setReady(true);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Show/hide fixed bottom bar when keyboard opens
+  useEffect(() => {
+    document.documentElement.dataset.keyboardOpen = isKeyboardOpen ? "true" : "false";
+  }, [isKeyboardOpen]);
+
   // Persist on every change
   useEffect(() => {
     if (!ready) return;
@@ -84,6 +142,7 @@ export default function WizardContainer() {
 
   const goNext = useCallback(() => {
     setDirection(1);
+    haptic(6);
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (phase === "identification") {
       setPhase("wizard");
@@ -101,6 +160,7 @@ export default function WizardContainer() {
 
   const goBack = useCallback(() => {
     setDirection(-1);
+    haptic(6);
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (phase === "wizard" && wizardStep === 0) {
       setPhase("identification");
@@ -180,16 +240,13 @@ export default function WizardContainer() {
         </div>
       </header>
 
-      {/* ── Progress bar ── */}
+      {/* ── Step progress dots ── */}
       {showProgress && (
-        <div className="px-4 border-b border-border/20">
-          <div className="max-w-6xl mx-auto">
-            <Progress
-              value={progressValue}
-              className="h-[3px] rounded-none bg-muted"
-            />
-          </div>
-        </div>
+        <StepProgress
+          current={wizardStep}
+          total={TOTAL_VISIBLE_STEPS}
+          phase={phase}
+        />
       )}
 
       {/* ── Content ── */}
@@ -242,6 +299,17 @@ export default function WizardContainer() {
                 animate="center"
                 exit="exit"
                 transition={{ duration: 0.22, ease: "easeInOut" }}
+                drag={phase === "wizard" ? "x" : false}
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.15}
+                onDragEnd={(_, info) => {
+                  if (Math.abs(info.offset.x) < 60) return;
+                  if (info.offset.x > 0) {
+                    goBack();
+                  } else {
+                    goNext();
+                  }
+                }}
               >
                 {phase === "identification" && (
                   <StepIdentification

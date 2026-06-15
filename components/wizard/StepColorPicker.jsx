@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import BackButton from "./BackButton";
+import { useHaptic } from "@/lib/hooks/useHaptic";
 
 const PRESET_COLORS = [
   // Neutros
@@ -20,8 +21,8 @@ const PRESET_COLORS = [
 ];
 
 const QUICK_COLORS = [
-  "#F2AFAF", "#DC2626", "#FFFFFF", "#1A1A1A", "#D7C1F2", "#2E79D1",
-  "#D9D9D9", "#A56A45", "#F2E9B6", "#6DC9A4", "#83D47A", "#FFD200",
+  "#F2AFAF", "#DE5E8B", "#FFFFFF", "#1A1A1A", "#D7C1F2", "#2E79D1",
+  "#D9D9D9", "#A56A45", "#E43B2F", "#6DC9A4", "#83D47A", "#FFD200",
 ];
 
 const COLOR_NAMES = {
@@ -80,6 +81,7 @@ export default function StepColorPicker({
   previewImage,
 }) {
   const [showAllColors, setShowAllColors] = useState(false);
+  const { trigger: haptic } = useHaptic();
   const value = data[field] || "#6DC9A4";
   const isValidHex = /^#[0-9A-Fa-f]{6}$/.test(value);
   const selectedColor = isValidHex ? value.toUpperCase() : "#6DC9A4";
@@ -89,6 +91,7 @@ export default function StepColorPicker({
   const extendedPalette = PRESET_COLORS.filter((color) => !quickPalette.includes(color));
 
   const handleColorPick = (color) => {
+    haptic(6);
     onUpdate({ [field]: color });
   };
 
@@ -123,14 +126,14 @@ export default function StepColorPicker({
           <p className="text-xs text-muted-foreground mb-2">
             Cores mais escolhidas
           </p>
-          <div className="grid grid-cols-6 sm:grid-cols-8 gap-2 mb-3">
+          <div className="grid grid-cols-4 sm:grid-cols-8 gap-3 mb-3">
             {quickPalette.map((preset) => (
               <button
                 key={preset}
                 type="button"
                 onClick={() => handleColorPick(preset)}
                 aria-label={`Selecionar ${COLOR_NAMES[preset] ?? preset}`}
-                className="w-11 h-11 sm:w-12 sm:h-12 rounded-lg border-2 transition-all active:scale-90"
+                className="aspect-square rounded-xl border-2 transition-all active:scale-90 min-h-[56px]"
                 style={{
                   background: preset,
                   borderColor:
@@ -148,7 +151,10 @@ export default function StepColorPicker({
             <div className="mb-2">
               <button
                 type="button"
-                onClick={() => setShowAllColors((prev) => !prev)}
+                onClick={() => {
+                  haptic(6);
+                  setShowAllColors((prev) => !prev);
+                }}
                 className="text-xs font-medium text-primary underline underline-offset-4"
               >
                 {showAllColors ? "Mostrar menos" : "Mostrar mais cores"}
@@ -159,14 +165,14 @@ export default function StepColorPicker({
           {showAllColors && (
             <>
               <p className="text-xs text-muted-foreground mb-2">Mais opções</p>
-              <div className="grid grid-cols-6 sm:grid-cols-8 gap-2 mb-1">
+              <div className="grid grid-cols-4 sm:grid-cols-8 gap-3 mb-1">
                 {extendedPalette.map((preset) => (
                   <button
                     key={preset}
                     type="button"
                     onClick={() => handleColorPick(preset)}
                     aria-label={`Selecionar ${COLOR_NAMES[preset] ?? preset}`}
-                    className="w-11 h-11 sm:w-12 sm:h-12 rounded-lg border-2 transition-all active:scale-90"
+                    className="aspect-square rounded-xl border-2 transition-all active:scale-90 min-h-[56px]"
                     style={{
                       background: preset,
                       borderColor:
@@ -181,20 +187,41 @@ export default function StepColorPicker({
               </div>
             </>
           )}
+
+          {/* Seletor de cor personalizada */}
+          <div className="mt-6 pt-4 border-t border-border/40">
+            <p className="text-xs text-muted-foreground mb-3">
+              Ou escolha uma cor personalizada
+            </p>
+            <div className="flex items-center gap-4">
+              <input
+                type="color"
+                value={isValidHex ? selectedColor : "#6DC9A4"}
+                onChange={(e) => handleColorPick(e.target.value)}
+                className="w-[72px] h-[72px] rounded-xl border-2 border-border/40 cursor-pointer bg-transparent p-1"
+                style={{ accentColor: "#6DC9A4" }}
+              />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-foreground">
+                  Toque no círculo ao lado
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Abre a paleta de cores do seu celular
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="flex items-center gap-3 w-full max-w-sm">
           <div
-            className="w-11 h-11 rounded-lg border border-border shrink-0 shadow-sm"
+            className="w-12 h-12 rounded-xl border-2 border-border/60 shrink-0 shadow-sm"
             style={{ background: selectedColor }}
           />
           <div className="flex-1">
             <p className="text-xs text-muted-foreground">Cor selecionada</p>
             <p className="text-sm font-semibold text-primary">
-              {COLOR_NAMES[selectedColor] ?? "Cor personalizada"}
-            </p>
-            <p className="text-xs font-mono tracking-wide text-muted-foreground">
-              {selectedColor}
+              {COLOR_NAMES[selectedColor] ?? "Personalizada"}
             </p>
           </div>
         </div>

@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import BackButton from "./BackButton";
+import StateMessage from "@/components/ui/StateMessage";
 
 function labelFromFilename(filename) {
   // Strip extension, then strip leading "N-" prefix if present
@@ -21,13 +22,21 @@ export default function StepEconomicGallery({
 }) {
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const loadModels = () => {
+    setLoading(true);
+    setError(null);
     fetch("/api/images?folder=models")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error("Erro ao carregar modelos");
+        return r.json();
+      })
       .then(({ files }) => { setModels(files ?? []); setLoading(false); })
-      .catch(() => { setModels([]); setLoading(false); });
-  }, []);
+      .catch((err) => { setError(err.message); setModels([]); setLoading(false); });
+  };
+
+  useEffect(() => { loadModels(); }, []);
 
   const handleSelect = (filename) => {
     onUpdate({ modelo_escolhido: filename });
@@ -49,10 +58,25 @@ export default function StepEconomicGallery({
         {loading && Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="aspect-square rounded-lg bg-muted animate-pulse" />
         ))}
-        {!loading && models.length === 0 && (
-          <p className="col-span-2 sm:col-span-3 text-center text-muted-foreground text-sm py-8">
-            Nenhum modelo encontrado na pasta.
-          </p>
+        {!loading && error && (
+          <div className="col-span-2 sm:col-span-3">
+            <StateMessage
+              type="error"
+              title="Não foi possível carregar"
+              description={error}
+              actionLabel="Tentar novamente"
+              onAction={loadModels}
+            />
+          </div>
+        )}
+        {!loading && !error && models.length === 0 && (
+          <div className="col-span-2 sm:col-span-3">
+            <StateMessage
+              type="empty"
+              title="Nenhum modelo disponível"
+              description="A galeria de modelos está vazia no momento. Tente novamente mais tarde."
+            />
+          </div>
         )}
         {!loading && models.map((filename) => {
           const isSelected = data.modelo_escolhido === filename;

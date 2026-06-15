@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import BackButton from "./BackButton";
+import { useHaptic } from "@/lib/hooks/useHaptic";
 
 const TYPES = [
   {
@@ -27,7 +28,10 @@ export default function StepLogoType({
   onReset,
   stepLabel,
 }) {
+  const { trigger: haptic } = useHaptic();
+
   const handleSelect = (tipo) => {
+    haptic(10);
     onUpdate({ tipo_logo: tipo });
     onNext();
   };

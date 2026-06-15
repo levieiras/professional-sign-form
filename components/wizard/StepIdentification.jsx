@@ -7,6 +7,7 @@ import { identificationSchema } from "@/lib/validations";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useHaptic } from "@/lib/hooks/useHaptic";
 
 function maskWhatsApp(value) {
   const digits = value.replace(/\D/g, "");
@@ -19,6 +20,7 @@ function maskWhatsApp(value) {
 }
 
 export default function StepIdentification({ data, onUpdate, onNext }) {
+  const { trigger: haptic } = useHaptic();
   const {
     register,
     handleSubmit,
@@ -37,6 +39,7 @@ export default function StepIdentification({ data, onUpdate, onNext }) {
   const nome = watch("nome");
 
   const onSubmit = (values) => {
+    haptic(10);
     onUpdate(values);
     onNext();
   };

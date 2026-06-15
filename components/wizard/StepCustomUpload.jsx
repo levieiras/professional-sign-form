@@ -6,6 +6,7 @@ import { Upload, X, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import BackButton from "./BackButton";
+import { useHaptic } from "@/lib/hooks/useHaptic";
 
 const MAX_SIZE = 4 * 1024 * 1024; // 4 MB (Vercel free tier limit)
 const ACCEPT_TYPES = ["image/jpeg", "image/png", "image/webp"];
@@ -20,11 +21,13 @@ export default function StepCustomUpload({
   setUploadFile,
   stepLabel,
 }) {
+  const { trigger: haptic } = useHaptic();
   const inputRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
   const [preview, setPreview] = useState(null);
 
   const handleFile = (file) => {
+    haptic(8);
     if (!ACCEPT_TYPES.includes(file.type)) {
       toast.error("Formato inválido. Use JPG, PNG ou WebP.");
       return;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
@@ -11,13 +11,11 @@ const TIPO_LABEL = { economica: "Econômica", customizada: "Customizada" };
 
 function ColorSwatch({ color }) {
   return (
-    <span className="inline-flex items-center gap-1.5">
-      <span
-        className="inline-block w-4 h-4 rounded border border-border"
-        style={{ background: color }}
-      />
-      <code className="font-mono text-xs">{color}</code>
-    </span>
+    <span
+      className="inline-block w-4 h-4 rounded border border-border shrink-0"
+      style={{ background: color }}
+      title="Cor selecionada"
+    />
   );
 }
 
@@ -32,9 +30,11 @@ function Row({ label, children }) {
 
 export default function StepSummary({ data, uploadFile, onBack, onReset, onSuccess }) {
   const [loading, setLoading] = useState(false);
+  const [sendError, setSendError] = useState(null);
 
   const handleSend = async () => {
     setLoading(true);
+    setSendError(null);
     try {
       const formData = new FormData();
 
@@ -67,6 +67,7 @@ export default function StepSummary({ data, uploadFile, onBack, onReset, onSucce
       toast.success("Solicitação enviada com sucesso!");
       onSuccess();
     } catch (err) {
+      setSendError(err.message);
       toast.error(`Erro ao enviar: ${err.message}`);
     } finally {
       setLoading(false);
@@ -120,6 +121,16 @@ export default function StepSummary({ data, uploadFile, onBack, onReset, onSucce
           <ColorSwatch color={data.cor_principal} />
         </Row>
       </div>
+
+      {sendError && (
+        <div className="flex items-start gap-3 bg-destructive/10 border border-destructive/20 rounded-xl px-4 py-3 mb-4">
+          <AlertTriangle size={18} className="text-destructive shrink-0 mt-0.5" />
+          <div className="text-sm">
+            <p className="font-semibold text-destructive mb-0.5">Erro ao enviar</p>
+            <p className="text-muted-foreground text-xs leading-relaxed">{sendError}</p>
+          </div>
+        </div>
+      )}
 
       <div className="fixed bottom-0 inset-x-0 z-50 px-4 pt-4 pb-safe sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50 lg:sticky lg:bottom-0 lg:-mx-4 lg:left-auto lg:right-auto lg:z-auto">
         <Button
