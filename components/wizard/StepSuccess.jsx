@@ -19,8 +19,6 @@ function WhatsAppIcon({ size = 18 }) {
     </svg>
   );
 }
-import { Button } from "@/components/ui/button";
-
 const WHATSAPP_NUMBER = "5547992786706";
 
 const COLOR_NAMES = {
@@ -40,90 +38,6 @@ function colorLabel(hex) {
   if (!hex) return "-";
   const name = COLOR_NAMES[hex.toUpperCase()] ?? COLOR_NAMES[hex];
   return name || "-";
-}
-
-function LogoPreview({ data }) {
-  const objColor = data.cor_objeto || "#6DC9A4";
-  const baseColor = data.cor_principal || "#6DC9A4";
-  const textBaseColor = data.cor_texto_base || "#F8F8F8";
-  const textInnerColor =
-    data.tipo_texto_interno === "negativo"
-      ? "transparent"
-      : data.cor_texto_interno || "#F8F8F8";
-  const textBase = data.texto_base || "TEXTO";
-  const textInner = data.texto_interno || "texto";
-  const isNegativo = data.tipo_texto_interno === "negativo";
-
-  return (
-    <div className="w-full max-w-[200px] mx-auto">
-      <svg viewBox="0 0 400 320" className="w-full h-auto drop-shadow-lg">
-        {/* Objeto decorativo (losangos) */}
-        <circle cx="200" cy="45" r="12" fill={objColor} opacity="0.9" />
-        <circle cx="170" cy="30" r="8" fill={objColor} opacity="0.7" />
-        <circle cx="230" cy="30" r="8" fill={objColor} opacity="0.7" />
-        <circle cx="150" cy="55" r="6" fill={objColor} opacity="0.5" />
-        <circle cx="250" cy="55" r="6" fill={objColor} opacity="0.5" />
-
-        {/* Texto sobre a base */}
-        <rect x="40" y="75" width="320" height="60" rx="8" fill={objColor} />
-        <text
-          x="200"
-          y="113"
-          textAnchor="middle"
-          fill={textBaseColor}
-          fontSize="26"
-          fontWeight="bold"
-          fontFamily="sans-serif"
-          letterSpacing="2"
-        >
-          {textBase}
-        </text>
-
-        {/* Base inferior */}
-        <rect x="60" y="150" width="280" height="100" rx="12" fill={baseColor} />
-
-        {/* Texto dentro da base */}
-        {isNegativo ? (
-          <foreignObject x="80" y="170" width="240" height="60">
-            <div
-              style={{
-                color: "transparent",
-                fontSize: "22px",
-                fontWeight: "bold",
-                textAlign: "center",
-                fontFamily: "sans-serif",
-                letterSpacing: "1px",
-                backgroundClip: "text",
-                WebkitBackgroundClip: "text",
-                backgroundImage: `linear-gradient(180deg, ${baseColor} 0%, ${baseColor} 100%)`,
-                color: "transparent",
-                mixBlendMode: "difference",
-                filter: "invert(1)",
-              }}
-            >
-              {textInner}
-            </div>
-          </foreignObject>
-        ) : (
-          <text
-            x="200"
-            y="205"
-            textAnchor="middle"
-            fill={textInnerColor}
-            fontSize="22"
-            fontWeight="bold"
-            fontFamily="sans-serif"
-            letterSpacing="1"
-          >
-            {textInner}
-          </text>
-        )}
-
-        {/* Detalhe decorativo */}
-        <line x1="100" y1="280" x2="300" y2="280" stroke={objColor} strokeWidth="2" opacity="0.3" />
-      </svg>
-    </div>
-  );
 }
 
 function buildSummaryMessage(data) {
@@ -242,28 +156,6 @@ export default function StepSuccess({ onReset, data }) {
           Obrigado pela preferência! 🙏 Recebemos o seu pedido e entraremos em
           contato em breve.
         </p>
-
-        {/* Preview do logo */}
-        <div className="w-full max-w-xs bg-card border border-border/60 rounded-2xl p-5 mb-6">
-          <p className="text-xs text-muted-foreground mb-4 text-center font-medium tracking-wide uppercase">
-            Preview do seu logo
-          </p>
-          <LogoPreview data={data} />
-          <div className="mt-4 pt-3 border-t border-border/30 space-y-1 text-xs text-muted-foreground text-left">
-            <div className="flex justify-between">
-              <span>Tipo</span>
-              <span className="font-medium text-foreground capitalize">
-                {data.tipo_logo === "economica" ? "Econômica" : "Customizada"}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>Texto</span>
-              <span className="font-medium text-foreground truncate ml-2">
-                {data.texto_base || "—"}
-              </span>
-            </div>
-          </div>
-        </div>
 
         <div className="flex flex-col gap-3 w-full max-w-sm">
           <a

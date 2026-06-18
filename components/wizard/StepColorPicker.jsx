@@ -81,6 +81,7 @@ export default function StepColorPicker({
   previewImage,
 }) {
   const [showAllColors, setShowAllColors] = useState(false);
+  const [userSelected, setUserSelected] = useState(false);
   const { trigger: haptic } = useHaptic();
   const value = data[field] || "#6DC9A4";
   const isValidHex = /^#[0-9A-Fa-f]{6}$/.test(value);
@@ -91,6 +92,7 @@ export default function StepColorPicker({
   const extendedPalette = PRESET_COLORS.filter((color) => !quickPalette.includes(color));
 
   const handleColorPick = (color) => {
+    setUserSelected(true);
     haptic(6);
     onUpdate({ [field]: color });
   };
@@ -230,7 +232,7 @@ export default function StepColorPicker({
       <div className="fixed bottom-0 inset-x-0 z-50 px-4 pt-4 pb-safe sm:pb-4 bg-background/95 backdrop-blur-sm border-t border-border/50 lg:sticky lg:bottom-0 lg:-mx-4 lg:left-auto lg:right-auto lg:z-auto">
         <Button
           onClick={onNext}
-          disabled={!isValidHex}
+          disabled={!userSelected}
           className="w-full py-6 text-base font-semibold"
         >
           Continuar
