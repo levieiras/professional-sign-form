@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "Solicitação de Logo — Levieira's",
   description: "Solicite sua logo personalizada",
+  metadataBase: new URL("https://levieiras.art"),
 };
 
 export const viewport = {

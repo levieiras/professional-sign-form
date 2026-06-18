@@ -123,15 +123,13 @@ A paleta inclui:
 
 ## 🔧 Variáveis de Ambiente
 
-Crie um arquivo `.env.local` na raiz:
+Crie um arquivo `.env.local` na raiz (use `.env.example` como base):
 
 ```env
-# Configurações de e-mail (Nodemailer)
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
-SMTP_USER=seu_email@example.com
-SMTP_PASS=sua_senha
-SMTP_FROM=seu_email@example.com
+# Configurações de e-mail (Nodemailer + Gmail)
+EMAIL_USER=seuemail@gmail.com
+EMAIL_PASS=sua-senha-de-app-do-gmail
+EMAIL_TO=levieiras.art@gmail.com
 ```
 
 ## 🚀 Deploy na Vercel

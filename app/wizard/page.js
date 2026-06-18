@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import WizardContainer from "@/components/wizard/WizardContainer";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 export const metadata = {
   title: "Solicitação de Logo — Levieira's",
@@ -62,7 +63,9 @@ function LoadingScreen() {
 export default function WizardPage() {
   return (
     <Suspense fallback={<LoadingScreen />}>
-      <WizardContainer />
+      <ErrorBoundary>
+        <WizardContainer />
+      </ErrorBoundary>
     </Suspense>
   );
 }
